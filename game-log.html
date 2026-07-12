@@ -243,47 +243,65 @@
       const field = $(btn.dataset.target);
       baseText = field.value ? field.value.replace(/\s+$/,'') + ' ' : '';
 
+      const IS_ANDROID = /Android/i.test(navigator.userAgent);
+
       recognition = new SR();
       recognition.lang = 'en-US';
-      recognition.continuous = true;
+      // Android's recognizer misbehaves in continuous mode (overlapping,
+      // repeated results). There we run ONE utterance per session and
+      // silently restart in onend — nothing accumulates, nothing duplicates.
+      recognition.continuous = !IS_ANDROID;
       recognition.interimResults = true;
 
-      // Android fix: process only NEW results (from e.resultIndex), keep
-      // finalized text in `committed`, and dedupe the duplicate finals
-      // Android Chrome is known to deliver.
-      let committed = '';
-      let lastFinal = '';
-      let lastFinalAt = 0;
+      let committed = '';      // text finalized across the whole dictation
+      let sessionUtter = '';   // live hypothesis of the current utterance (Android)
+
+      function render(extra){
+        field.value = (baseText + committed + (extra || ''))
+          .replace(/\s+/g,' ').trimStart();
+      }
+      function commitUtterance(){
+        const t = sessionUtter.trim();
+        sessionUtter = '';
+        if (t) committed += t + ' ';
+      }
 
       recognition.onresult = (e) => {
-        let interim = '';
-        for (let i = e.resultIndex; i < e.results.length; i++){
-          const t = e.results[i][0].transcript.trim();
-          if (!t) continue;
-          if (e.results[i].isFinal){
-            const now = Date.now();
-            const isDuplicate = (t === lastFinal && now - lastFinalAt < 1500);
-            if (!isDuplicate){
-              committed += t + ' ';
-              lastFinal = t;
-              lastFinalAt = now;
-            }
+        if (IS_ANDROID){
+          // Fresh session per utterance: the latest hypothesis REPLACES the
+          // previous one instead of being appended — duplication impossible.
+          let utter = '';
+          for (let i = 0; i < e.results.length; i++) utter += e.results[i][0].transcript + ' ';
+          sessionUtter = utter;
+          if (e.results[e.results.length - 1].isFinal){
+            commitUtterance();
+            render();
           } else {
-            interim += t + ' ';
+            render(sessionUtter);
           }
+        } else {
+          // Desktop: continuous mode, process only new results
+          let interim = '';
+          for (let i = e.resultIndex; i < e.results.length; i++){
+            const t = e.results[i][0].transcript.trim();
+            if (!t) continue;
+            if (e.results[i].isFinal) committed += t + ' ';
+            else interim += t + ' ';
+          }
+          render(interim);
         }
-        field.value = (baseText + committed + interim).replace(/\s+/g,' ').trimStart();
       };
       recognition.onerror = (e) => {
-        if (e.error === 'no-speech') return; // harmless; onend will handle restart
+        if (e.error === 'no-speech' || e.error === 'aborted') return; // onend handles restart
         stopMic();
         if (e.error === 'not-allowed') setStatus('err','Microphone permission denied. Allow the mic for this page in your browser settings.');
         else setStatus('err','Speech error: ' + e.error);
       };
-      // Android stops "continuous" listening after every pause — restart
-      // silently while the mic is still toggled on, keeping committed text.
+      // Restart silently while the mic is toggled on. If a session ended
+      // with unfinalized text (some recognizers never mark isFinal), keep it.
       recognition.onend = () => {
         if (activeMic === btn){
+          if (sessionUtter){ commitUtterance(); render(); }
           try{ recognition.start(); }
           catch(err){ stopMic(); }
         }
