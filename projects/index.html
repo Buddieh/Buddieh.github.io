@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects — Shahdad "Buddieh" Neshin</title>
+<meta name="description" content="Things Shahdad &quot;Buddieh&quot; Neshin builds alongside client work: board game organizers, tools for game design, and projects outside games.">
+<link rel="canonical" href="https://buddieh.github.io/projects/">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Sora:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#F6F5EF;--ink:#22242A;--blue:#2B5BD7;--yellow:#F2B92E;--red:#E4572E;--line:#22242A;--card:#fff;--maxw:1060px}
+  *{box-sizing:border-box;margin:0;padding:0}
+  @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+  body{
+    font-family:'Sora',system-ui,sans-serif;color:var(--ink);
+    background-color:var(--paper);
+    background-image:radial-gradient(rgba(34,36,42,.13) 1.5px, transparent 1.5px);
+    background-size:26px 26px;line-height:1.6;font-size:17px;
+  }
+  a{color:var(--blue)}
+  a:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:4px}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+
+  header{position:sticky;top:0;z-index:10;background:rgba(246,245,239,.9);backdrop-filter:blur(6px);border-bottom:2px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;max-width:var(--maxw);margin:0 auto}
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none}
+  .nav a.cta{
+    font-family:'IBM Plex Mono',monospace;font-size:.85rem;font-weight:500;text-decoration:none;color:var(--ink);
+    border:2px solid var(--line);border-radius:10px;padding:8px 16px;background:var(--yellow);box-shadow:3px 3px 0 var(--line);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .nav a.cta:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--line)}
+  @media (max-width:560px){.logo .name{display:none}}
+
+  .intro{padding:72px 0 24px}
+  .kicker{font-family:'IBM Plex Mono',monospace;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;opacity:.75;margin-bottom:14px}
+  h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(2.2rem,5vw,3.4rem);line-height:1.05;letter-spacing:-.01em}
+  .intro p{max-width:56ch;margin-top:18px;font-size:1.05rem}
+
+  section{padding:40px 0 24px}
+  h2{font-family:'IBM Plex Mono',monospace;font-size:.85rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px;opacity:.8}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+  .proj{
+    position:relative;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:24px;
+    box-shadow:5px 5px 0 var(--line);display:flex;flex-direction:column;gap:12px;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .proj:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--line)}
+  .proj .top{display:flex;align-items:center;gap:14px}
+  .proj img{width:48px;height:48px;flex:none;display:block}
+  .proj h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.15rem;line-height:1.2}
+  .proj h3 a{color:var(--ink);text-decoration:none}
+  /* whole card is clickable via the title link */
+  .proj h3 a::after{content:"";position:absolute;inset:0;border-radius:16px}
+  .proj p{font-size:.95rem}
+  .proj .meta{margin-top:auto;padding-top:6px;display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:.78rem}
+  .proj .open{opacity:.65}
+  .proj .src{position:relative;z-index:1;color:var(--ink);opacity:.65}
+  .proj .src:hover{opacity:1}
+
+  footer{margin-top:64px;border-top:2px solid var(--line);padding:26px 0;font-family:'IBM Plex Mono',monospace;font-size:.78rem;opacity:.7}
+  footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  footer a{color:inherit}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav" aria-label="Main">
+    <a class="logo" href="../" aria-label="Home">
+      <img src="../icons/buddieh.svg" width="26" height="26" alt="">
+      <span class="name">Shahdad "Buddieh" Neshin</span>
+    </a>
+    <a class="cta" href="mailto:Shahdad.bn@gmail.com">Say hello →</a>
+  </nav>
+</header>
+
+<main class="wrap">
+  <div class="intro">
+    <p class="kicker">Projects</p>
+    <h1>Things I build alongside client work.</h1>
+    <p>Organizers and tools from my own game design practice, and a few projects outside games that I care about.</p>
+  </div>
+
+  <section aria-labelledby="h-games">
+    <h2 id="h-games">For tabletop games</h2>
+    <div class="grid">
+      <article class="proj">
+        <div class="top"><img src="../icons/organizers.svg" alt=""><h3><a href="https://makerworld.com/en/@bgsystems" target="_blank" rel="noopener">Board Game Systems organizers</a></h3></div>
+        <p>3D-printable organizers that cut setup and teardown time, for Arcs, Ra, Vantage, Railway Boom and more. Free on MakerWorld, each with a tested print profile.</p>
+        <div class="meta"><span class="open">makerworld.com ↗</span></div>
+      </article>
+      <article class="proj">
+        <div class="top"><img src="../icons/solid-to-scad.svg" alt=""><h3><a href="../Solid-to-SCAD/">Solid to SCAD</a></h3></div>
+        <p>Turns a set of STL exports into one parametric OpenSCAD file for MakerWorld's customizer, so people can resize a model themselves. Runs in your browser; files never leave your computer.</p>
+        <div class="meta"><span class="open">Open →</span><a class="src" href="https://github.com/Buddieh/Solid-to-SCAD" target="_blank" rel="noopener">Source</a></div>
+      </article>
+      <article class="proj">
+        <div class="top"><img src="../icons/game-log.svg" alt=""><h3><a href="../game-log.html">Game Log</a></h3></div>
+        <p>The dictation form behind my analysis library. After each game I answer the same five questions out loud: core loop, intended feel, load-bearing mechanisms, where it creaks, and the smallest change I'd test.</p>
+        <div class="meta"><span class="open">Open →</span></div>
+      </article>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-beyond">
+    <h2 id="h-beyond">Beyond games</h2>
+    <div class="grid">
+      <article class="proj">
+        <div class="top"><img src="../icons/persian-environment.svg" alt=""><h3><a href="../Persian_environment/">Mohammad Darvish on Iran's environment</a></h3></div>
+        <p>A searchable Persian and English archive of an environmentalist's statements about Iran, from interviews, podcasts and his own writing. Every quote links to its source.</p>
+        <div class="meta"><span class="open">Open →</span><a class="src" href="https://github.com/Buddieh/Persian_environment" target="_blank" rel="noopener">Source</a></div>
+      </article>
+      <article class="proj">
+        <div class="top"><img src="../icons/energy-ladder.svg" alt=""><h3><a href="../mindful_usage/">Energy Ladder</a></h3></div>
+        <p>Practical energy-saving tips for homes in Belgium, each linked to its official source, covering Flanders, Brussels and Wallonia in Dutch, French and English.</p>
+        <div class="meta"><span class="open">Open →</span><a class="src" href="https://github.com/Buddieh/mindful_usage" target="_blank" rel="noopener">Source</a></div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="year"></span> Shahdad "Buddieh" Neshin · Ghent, Belgium</span>
+    <span>BTW BE 0800.845.262</span>
+  </div>
+</footer>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

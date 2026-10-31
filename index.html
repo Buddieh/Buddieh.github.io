@@ -6,6 +6,7 @@
 <title>Shahdad "Buddieh" Neshin — Tabletop Game Development &amp; Rulebook Editing</title>
 <meta name="description" content="Freelance tabletop game developer in Belgium. Development critique, structured playtesting, and rulebook editing.">
 <link rel="canonical" href="https://buddieh.github.io/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Sora:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
@@ -60,6 +61,10 @@
     transition:transform .12s ease, box-shadow .12s ease;
   }
   .nav a.cta:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--line)}
+  .nav-links{display:flex;align-items:center;gap:22px}
+  .nav a.quiet{font-family:'IBM Plex Mono',monospace;font-size:.85rem;color:var(--ink);text-decoration:none;opacity:.75}
+  .nav a.quiet:hover{opacity:1;text-decoration:underline;text-underline-offset:4px}
+  @media (max-width:560px){.logo .name{display:none}}
 
   /* ---------- hero ---------- */
   .hero{padding-top:96px;padding-bottom:72px}
@@ -148,6 +153,19 @@
   .sample p{font-size:.95rem;margin-bottom:16px}
   .sample a{font-family:'IBM Plex Mono',monospace;font-size:.9rem}
 
+  /* ---------- organizers ---------- */
+  .org{margin-top:22px;
+    background:var(--card);border:2px solid var(--line);border-radius:16px;
+    padding:28px;box-shadow:5px 5px 0 var(--line);
+    display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:start;
+  }
+  .org img{width:64px;height:64px;display:block}
+  .org h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.2rem;margin-bottom:6px}
+  .org p{font-size:.98rem;max-width:60ch}
+  .games{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 22px;list-style:none}
+  .games li{font-family:'IBM Plex Mono',monospace;font-size:.78rem;border:2px solid var(--line);border-radius:999px;padding:4px 12px;background:var(--paper)}
+  @media (max-width:560px){.org{grid-template-columns:1fr}}
+
   /* ---------- about ---------- */
   .about-grid{display:grid;grid-template-columns:1fr;gap:28px;max-width:64ch}
   .about-grid p{font-size:1.02rem}
@@ -189,9 +207,12 @@
         <path fill="var(--blue)" stroke="var(--ink)" stroke-width="6"
           d="M50 6c-11 0-18 8-18 17 0 5 2 9 5 12C26 40 14 48 8 58c-3 5 0 11 6 11h16c-4 7-7 15-8 22-1 4 2 7 6 7h14c4 0 7-3 8-7 1 4 4 7 8 7h14c4 0 7-3 6-7-1-7-4-15-8-22h16c6 0 9-6 6-11-6-10-18-18-29-23 3-3 5-7 5-12C68 14 61 6 50 6z"/>
       </svg>
-      Shahdad "Buddieh" Neshin
+      <span class="name">Shahdad "Buddieh" Neshin</span>
     </a>
-    <a class="cta" href="mailto:Shahdad.bn@gmail.com">Say hello →</a>
+    <div class="nav-links">
+      <a class="quiet" href="projects/">Projects</a>
+      <a class="cta" href="mailto:Shahdad.bn@gmail.com">Say hello →</a>
+    </div>
   </nav>
 </header>
 
@@ -264,6 +285,27 @@
     </div>
   </section>
 
+  <!-- ============ ORGANIZERS ============ -->
+  <section id="organizers">
+    <div class="wrap">
+      <div class="sec-head">
+        <svg class="secdie" data-pips="2" width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"></svg>
+        <h2>Organizers</h2>
+      </div>
+      <div class="org">
+        <img src="icons/organizers.svg" alt="" width="64" height="64">
+        <div>
+          <h3>Board Game Systems</h3>
+          <p>The Production service, in public: organizers I design to cut setup and teardown time as far as it will go, published free to print with a tested print profile. It's the same work I'd do on the inside of your box.</p>
+          <ul class="games" aria-label="Games with published organizers">
+            <li>Arcs</li><li>Ra (2023)</li><li>Vantage</li><li>Railway Boom</li>
+          </ul>
+          <a class="btn" href="https://makerworld.com/en/@bgsystems" target="_blank" rel="noopener">See them on MakerWorld →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ WORK — hidden until the portfolio PDFs are real.
        To bring it back: delete this line and the closing comment line below the section. -->
   <!--
@@ -294,7 +336,7 @@
   <section id="about">
     <div class="wrap">
       <div class="sec-head">
-        <svg class="secdie" data-pips="2" width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"></svg>
+        <svg class="secdie" data-pips="3" width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"></svg>
         <h2>About</h2>
       </div>
       <div class="about-grid">
@@ -326,7 +368,7 @@
   <section id="contact" class="contact">
     <div class="wrap">
       <div class="sec-head" style="justify-content:center">
-        <svg class="secdie" data-pips="3" width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"></svg>
+        <svg class="secdie" data-pips="4" width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"></svg>
         <h2>Let's make your game better</h2>
       </div>
       <p>Tell me what you're working on and where it creaks. I'll reply within two working days with an honest read on whether I can help.</p>
@@ -339,7 +381,7 @@
 <footer>
   <div class="wrap">
     <span>© <span id="year"></span> Shahdad "Buddieh" Neshin · Ghent, Belgium</span>
-    <span>BTW BE 0800.845.262 · <a href="game-log.html" style="color:inherit">🎲 log</a></span>
+    <span>BTW BE 0800.845.262</span>
   </div>
 </footer>
 
