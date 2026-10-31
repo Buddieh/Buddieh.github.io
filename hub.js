@@ -2,7 +2,7 @@
  * Buddieh hub badge: a small "back to Buddieh" link for project sites.
  *
  * Add one line before </body> in any project site:
- *   <script src="https://buddieh.be/hub.js" defer></script>
+ *   <script src="https://buddieh.com/hub.js" defer></script>
  *   (https://buddieh.github.io/hub.js keeps working too: GitHub redirects it)
  *
  * Options (attributes on that script tag):
