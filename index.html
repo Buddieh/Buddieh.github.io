@@ -161,10 +161,14 @@
   }
   .org img{width:64px;height:64px;display:block}
   .org h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.2rem;margin-bottom:6px}
-  .org p{font-size:.98rem;max-width:60ch}
-  .games{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 22px;list-style:none}
-  .games li{font-family:'IBM Plex Mono',monospace;font-size:.78rem;border:2px solid var(--line);border-radius:999px;padding:4px 12px;background:var(--paper)}
+  .org p{font-size:.98rem;max-width:60ch;margin-bottom:20px}
   @media (max-width:560px){.org{grid-template-columns:1fr}}
+  .shots{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px;list-style:none}
+  .shots a{display:block;text-decoration:none;color:var(--ink);border:2px solid var(--line);border-radius:12px;overflow:hidden;background:var(--paper);transition:transform .15s,box-shadow .15s}
+  .shots a:hover,.shots a:focus-visible{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--line)}
+  .shots img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover}
+  .shots span{display:block;font-family:'IBM Plex Mono',monospace;font-size:.74rem;padding:6px 10px;border-top:2px solid var(--line)}
+  @media (max-width:760px){.shots{grid-template-columns:repeat(2,1fr)}}
 
   /* ---------- about ---------- */
   .about-grid{display:grid;grid-template-columns:1fr;gap:28px;max-width:64ch}
@@ -297,12 +301,15 @@
         <div>
           <h3>Board Game Systems</h3>
           <p>The Production service, in public: organizers I design to cut setup and teardown time as far as it will go, published free to print with a tested print profile. It's the same work I'd do on the inside of your box.</p>
-          <ul class="games" aria-label="Games with published organizers">
-            <li>Arcs</li><li>Ra (2023)</li><li>Vantage</li><li>Railway Boom</li>
-          </ul>
           <a class="btn" href="https://makerworld.com/en/@bgsystems" target="_blank" rel="noopener">See them on MakerWorld →</a>
         </div>
       </div>
+      <ul class="shots" aria-label="Organizer photos">
+        <li><a href="https://makerworld.com/en/@bgsystems" target="_blank" rel="noopener"><img src="img/organizers/railway-boom.jpg" alt="Railway Boom insert: printed card holders and a lidded token box filling the game box" width="640" height="480" loading="lazy"><span>Railway Boom</span></a></li>
+        <li><a href="https://makerworld.com/en/@bgsystems" target="_blank" rel="noopener"><img src="img/organizers/arcs.jpg" alt="Arcs insert: player token trays and resource holder in the game box" width="640" height="480" loading="lazy"><span>Arcs</span></a></li>
+        <li><a href="https://makerworld.com/en/@bgsystems" target="_blank" rel="noopener"><img src="img/organizers/vantage.jpg" alt="Vantage coin holder with sliding lid, filled with coins" width="640" height="480" loading="lazy"><span>Vantage</span></a></li>
+        <li><a href="https://makerworld.com/en/@bgsystems" target="_blank" rel="noopener"><img src="img/organizers/ra.jpg" alt="Ra scoring token holder with sliding lid half open" width="640" height="480" loading="lazy"><span>Ra (2023)</span></a></li>
+      </ul>
     </div>
   </section>
 
