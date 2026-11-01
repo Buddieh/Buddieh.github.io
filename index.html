@@ -179,6 +179,18 @@
     border:2px solid var(--line);border-radius:999px;padding:5px 13px;background:var(--card);
   }
 
+  .profile{
+    display:inline-flex;align-items:center;gap:14px;justify-self:start;
+    text-decoration:none;color:var(--ink);
+    background:var(--card);border:2px solid var(--line);border-radius:14px;
+    padding:12px 20px 12px 12px;box-shadow:4px 4px 0 var(--line);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .profile:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--line)}
+  .profile img{width:44px;height:44px;flex:none;display:block}
+  .profile strong{display:block;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.02rem;line-height:1.2}
+  .profile small{display:block;font-family:'IBM Plex Mono',monospace;font-size:.78rem;opacity:.7}
+
   /* ---------- contact ---------- */
   .contact{text-align:center;padding:88px 0}
   .contact h2{margin-bottom:14px}
@@ -367,6 +379,10 @@
           <span class="fact">In-house 3D prototyping</span>
           <span class="fact">NDA-friendly</span>
         </div>
+        <a class="profile" href="https://boardgamegeek.com/user/Buddieh" target="_blank" rel="noopener">
+          <img src="icons/bgg.svg" alt="" width="44" height="44">
+          <span><strong>Buddieh on BoardGameGeek</strong><small>boardgamegeek.com ↗</small></span>
+        </a>
       </div>
     </div>
   </section>
