@@ -27,14 +27,16 @@
 
   header{position:sticky;top:0;z-index:10;background:rgba(246,245,239,.9);backdrop-filter:blur(6px);border-bottom:2px solid var(--line)}
   .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;max-width:var(--maxw);margin:0 auto}
-  .logo{display:flex;align-items:center;gap:10px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none}
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.75rem;line-height:1;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
   .nav a.cta{
     font-family:'IBM Plex Mono',monospace;font-size:.85rem;font-weight:500;text-decoration:none;color:var(--ink);
     border:2px solid var(--line);border-radius:10px;padding:8px 16px;background:var(--yellow);box-shadow:3px 3px 0 var(--line);
     transition:transform .12s ease, box-shadow .12s ease;
   }
   .nav a.cta:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--line)}
-  @media (max-width:560px){.logo .name{display:none}}
+  .nav a.cta{white-space:nowrap}
+  @media (max-width:560px){.nav{padding:14px 16px}.logo{font-size:1.3rem;gap:8px}.logo svg,.logo img{width:40px;height:32px}.nav-links{gap:14px}.nav a.cta{padding:8px 12px}}
+  @media (max-width:370px){.logo .name{display:none}}
 
   .intro{padding:72px 0 24px}
   .kicker{font-family:'IBM Plex Mono',monospace;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;opacity:.75;margin-bottom:14px}
@@ -72,9 +74,9 @@
 
 <header>
   <nav class="nav" aria-label="Main">
-    <a class="logo" href="../" aria-label="Home">
-      <img src="../icons/buddieh.svg" width="38" height="31" alt="">
-      <span class="name">Shahdad "Buddieh" Neshin</span>
+    <a class="logo" href="../" aria-label="Buddieh, home">
+      <img src="../icons/buddieh.svg" width="50" height="40" alt="">
+      <span class="name">buddieh</span>
     </a>
     <a class="cta" href="mailto:hello@buddieh.com">Say hello →</a>
   </nav>

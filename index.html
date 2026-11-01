@@ -51,7 +51,7 @@
     border-bottom:2px solid var(--line);
   }
   .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;max-width:var(--maxw);margin:0 auto}
-  .logo{display:flex;align-items:center;gap:10px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:.01em;color:var(--ink);text-decoration:none}
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.75rem;line-height:1;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
   .logo svg{display:block}
   .nav a.cta{
     font-family:'IBM Plex Mono',monospace;font-size:.85rem;font-weight:500;
@@ -65,7 +65,9 @@
   .nav-links{display:flex;align-items:center;gap:22px}
   .nav a.quiet{font-family:'IBM Plex Mono',monospace;font-size:.85rem;color:var(--ink);text-decoration:none;opacity:.75}
   .nav a.quiet:hover{opacity:1;text-decoration:underline;text-underline-offset:4px}
-  @media (max-width:560px){.logo .name{display:none}}
+  .nav a.cta{white-space:nowrap}
+  @media (max-width:560px){.nav{padding:14px 16px}.logo{font-size:1.3rem;gap:8px}.logo svg,.logo img{width:40px;height:32px}.nav-links{gap:14px}.nav a.cta{padding:8px 12px}}
+  @media (max-width:370px){.logo .name{display:none}}
 
   /* ---------- hero ---------- */
   .hero{padding-top:96px;padding-bottom:72px}
@@ -218,13 +220,13 @@
 
 <header>
   <nav class="nav" aria-label="Main">
-    <a class="logo" href="#top" aria-label="Home">
+    <a class="logo" href="#top" aria-label="Buddieh, home">
       <!-- dune B mark: a B lying in the sand -->
-      <svg width="38" height="31" viewBox="4 10 92 74" aria-hidden="true">
+      <svg width="50" height="40" viewBox="4 10 92 74" aria-hidden="true">
         <circle cx="24" cy="22" r="8" fill="var(--red)" stroke="var(--ink)" stroke-width="4"/>
         <path d="M8 80 C8 40 47 40 47 80 C47 30 92 30 92 80 Z" fill="var(--yellow)" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round"/>
       </svg>
-      <span class="name">Shahdad "Buddieh" Neshin</span>
+      <span class="name">buddieh</span>
     </a>
     <div class="nav-links">
       <a class="quiet" href="projects/">Projects</a>
