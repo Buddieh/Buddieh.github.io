@@ -64,6 +64,10 @@
   .proj .open{opacity:.65}
   .proj .src{position:relative;z-index:1;color:var(--ink);opacity:.65}
   .proj .src:hover{opacity:1}
+  /* not live yet: no link, no hover lift */
+  .proj.soon{box-shadow:5px 5px 0 rgba(34,36,42,.35);border-style:dashed}
+  .proj.soon:hover{transform:none;box-shadow:5px 5px 0 rgba(34,36,42,.35)}
+  .proj .badge{font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;border:2px solid var(--line);border-radius:999px;padding:3px 10px;background:var(--yellow)}
 
   footer{margin-top:64px;border-top:2px solid var(--line);padding:26px 0;font-family:'IBM Plex Mono',monospace;font-size:.78rem;opacity:.7}
   footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
@@ -122,6 +126,11 @@
         <div class="top"><img src="../icons/energy-ladder.svg" alt=""><h3><a href="../mindful_usage/">Energy Ladder</a></h3></div>
         <p>Practical energy-saving tips for homes in Belgium, each linked to its official source, covering Flanders, Brussels and Wallonia in Dutch, French and English.</p>
         <div class="meta"><span class="open">Open →</span><a class="src" href="https://github.com/Buddieh/mindful_usage" target="_blank" rel="noopener">Source</a></div>
+      </article>
+      <article class="proj soon" id="stained-glass">
+        <div class="top"><img src="../icons/stained-glass.svg" alt=""><h3>Stained Glass Generator</h3></div>
+        <p>Turns any image into a 3D-printable stained glass panel, with a built-in 3D preview and 3MF or STL download. Runs in your browser; your photos never leave your computer.</p>
+        <div class="meta"><span class="badge">Coming soon</span></div>
       </article>
     </div>
   </section>
