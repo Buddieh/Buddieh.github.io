@@ -82,6 +82,13 @@
   #settings.open{display:block}
   .small{font-size:.82rem;opacity:.8;margin-top:8px}
   .small a{color:var(--blue)}
+  .guide{display:inline-flex;align-items:center;gap:8px;font-weight:600;text-decoration:none}
+  .guide:hover{text-decoration:underline}
+  .guide .i{
+    width:22px;height:22px;border:2px solid currentColor;border-radius:50%;flex:none;
+    display:inline-flex;align-items:center;justify-content:center;
+    font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:500;font-style:normal;
+  }
 </style>
 </head>
 <body>
@@ -117,7 +124,7 @@
       <button class="btn" id="saveSettings" type="button">Save settings</button>
       <button class="btn" id="testSettings" type="button">Test connection</button>
     </div>
-    <p class="small">Setup guide is in <strong>notion-setup.md</strong> that came with this app.</p>
+    <p class="small"><a class="guide" href="game-log-setup.html"><span class="i" aria-hidden="true">i</span>How do I get these? Setup guide</a></p>
   </div>
 
   <!-- ============ LOG FORM ============ -->

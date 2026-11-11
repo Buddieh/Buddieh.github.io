@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Log — Setup guide</title>
+<meta name="theme-color" content="#F6F5EF">
+<link rel="icon" href="icons/game-log.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Sora:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F5EF; --ink:#22242A; --blue:#2B5BD7; --yellow:#F2B92E; --red:#E4572E; --card:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Sora',system-ui,sans-serif;color:var(--ink);
+    background-color:var(--paper);
+    background-image:radial-gradient(rgba(34,36,42,.12) 1.5px, transparent 1.5px);
+    background-size:26px 26px;
+    line-height:1.6;font-size:16px;
+    padding:20px 16px 80px;
+  }
+  .wrap{max-width:680px;margin:0 auto}
+  h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.6rem;letter-spacing:-.01em}
+  h2{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.15rem;display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .kicker{font-family:'IBM Plex Mono',monospace;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;opacity:.7;margin-bottom:4px}
+  header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:22px}
+  .iconbtn{
+    border:2px solid var(--ink);border-radius:10px;background:var(--card);text-decoration:none;display:inline-block;
+    font-family:'IBM Plex Mono',monospace;font-size:.78rem;font-weight:500;white-space:nowrap;
+    padding:8px 12px;box-shadow:3px 3px 0 var(--ink);color:var(--ink);
+  }
+  .iconbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+  a:focus-visible,button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+
+  .panel{background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:16px 18px;box-shadow:4px 4px 0 var(--ink);margin-bottom:16px}
+  .intro{font-size:.95rem}
+  .num{
+    width:30px;height:30px;border:2px solid var(--ink);border-radius:50%;flex:none;background:var(--yellow);
+    display:inline-flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:.85rem;
+  }
+  ol,ul{padding-left:22px}
+  li{margin:4px 0}
+  p + ol, p + ul, ol + p, ul + p, pre + p, p + p{margin-top:8px}
+  a{color:var(--blue)}
+  code{font-family:'IBM Plex Mono',monospace;font-size:.82em;background:#F1EFE6;border-radius:5px;padding:1px 5px}
+  .field{font-family:'IBM Plex Mono',monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;background:var(--blue);color:#fff;border-radius:6px;padding:2px 7px;white-space:nowrap}
+  .note{font-size:.85rem;border-left:4px solid var(--yellow);padding:6px 10px;background:#FFF9E8;border-radius:0 8px 8px 0;margin-top:10px}
+  .codehead{display:flex;justify-content:space-between;align-items:center;margin-top:12px;margin-bottom:6px}
+  .codehead span{font-family:'IBM Plex Mono',monospace;font-size:.72rem;opacity:.7}
+  .copy{
+    border:2px solid var(--ink);border-radius:999px;background:var(--card);cursor:pointer;color:var(--ink);
+    font-family:'IBM Plex Mono',monospace;font-size:.72rem;padding:4px 12px;box-shadow:2px 2px 0 var(--ink);
+  }
+  .copy:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--ink)}
+  pre{
+    background:var(--ink);color:#F6F5EF;border-radius:10px;padding:12px 14px;overflow-x:auto;
+    font-family:'IBM Plex Mono',monospace;font-size:.75rem;line-height:1.5;
+  }
+  pre code{background:none;padding:0;font-size:inherit;color:inherit;border-radius:0}
+  .done{text-align:center}
+  .done .iconbtn{margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <p class="kicker">Game Log · setup guide</p>
+      <h1>Connect Game Log to Notion</h1>
+    </div>
+    <a class="iconbtn" href="game-log.html">← Game Log</a>
+  </header>
+
+  <div class="panel intro">
+    <p>Game Log saves each entry as a page in a Notion database. You need three things for the <strong>⚙ Setup</strong> panel: a small relay URL, a Notion integration secret, and the database ID. It takes about ten minutes, once, and both services are free.</p>
+    <p class="note">Why a relay? Browsers aren't allowed to call Notion's API directly from a web page, so a tiny Cloudflare Worker passes the request along. It stores nothing: your secret stays on your device and is sent with each save.</p>
+  </div>
+
+  <div class="panel">
+    <h2><span class="num">1</span>Create a Notion integration</h2>
+    <ol>
+      <li>Open <a href="https://www.notion.so/profile/integrations" target="_blank" rel="noopener">notion.so/profile/integrations</a> and click <strong>New integration</strong>.</li>
+      <li>Give it a name (for example <em>Game Log</em>), pick your workspace, and keep the type <strong>Internal</strong>.</li>
+      <li>Under <strong>Capabilities</strong>, make sure <em>Read content</em> and <em>Insert content</em> are on. Save.</li>
+      <li>Copy the <strong>Internal Integration Secret</strong> (it starts with <code>ntn_</code> or <code>secret_</code>). This goes in <span class="field">Notion integration secret</span>.</li>
+    </ol>
+    <p class="note">Treat the secret like a password. Don't paste it into any file you upload or host.</p>
+  </div>
+
+  <div class="panel">
+    <h2><span class="num">2</span>Make the database and share it</h2>
+    <ol>
+      <li>In Notion, create a new page and choose <strong>Database → Table</strong> (a full-page database works best).</li>
+      <li>Keep the title column named exactly <code>Name</code>. Game Log writes the game title there and puts your notes inside the page.</li>
+      <li>Open the database's <strong>•••</strong> menu (top right) → <strong>Connections</strong> → find your integration and confirm. Without this step Notion answers “object not found”.</li>
+      <li>Copy the link to the database (<strong>Share → Copy link</strong>). The ID is the 32-character string before <code>?v=</code>:
+        <br><code>notion.so/yourspace/<strong>1a2b3c4d5e6f…</strong>?v=…</code>
+        <br>This goes in <span class="field">Notion database ID</span>.</li>
+    </ol>
+  </div>
+
+  <div class="panel">
+    <h2><span class="num">3</span>Deploy the relay (Cloudflare Worker)</h2>
+    <ol>
+      <li>Sign in at <a href="https://dash.cloudflare.com/" target="_blank" rel="noopener">dash.cloudflare.com</a> (a free account is enough).</li>
+      <li>Go to <strong>Workers &amp; Pages → Create → Worker</strong>, start from the “Hello World” template, name it, and click <strong>Deploy</strong>.</li>
+      <li>Click <strong>Edit code</strong>, replace everything with the code below, and click <strong>Deploy</strong> again.</li>
+      <li>Copy the worker's address (<code>https://….workers.dev</code>). This goes in <span class="field">Relay (Cloudflare Worker) URL</span>.</li>
+    </ol>
+    <div class="codehead"><span>worker.js</span><button class="copy" id="copyWorker" type="button">copy code</button></div>
+<pre id="workerCode"><code>// Game Log relay: forwards requests to the Notion API and adds CORS headers.
+// It stores nothing. The Notion secret comes from the app with each request.
+const ALLOWED_ORIGIN = '*'; // or 'https://buddieh.com' to accept only this site
+
+export default {
+  async fetch(request) {
+    const cors = {
+      'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
+      'Access-Control-Allow-Methods': 'GET, POST, PATCH, OPTIONS',
+      'Access-Control-Allow-Headers': 'Authorization, Notion-Version, Content-Type',
+    };
+    if (request.method === 'OPTIONS') return new Response(null, { headers: cors });
+
+    const url = new URL(request.url);
+    if (!url.pathname.startsWith('/v1/')) {
+      return new Response('Game Log relay is running.', { headers: cors });
+    }
+
+    const res = await fetch('https://api.notion.com' + url.pathname + url.search, {
+      method: request.method,
+      headers: {
+        'Authorization': request.headers.get('Authorization') || '',
+        'Notion-Version': request.headers.get('Notion-Version') || '2022-06-28',
+        'Content-Type': 'application/json',
+      },
+      body: request.method === 'GET' ? undefined : await request.text(),
+    });
+
+    return new Response(res.body, {
+      status: res.status,
+      headers: { ...cors, 'Content-Type': 'application/json' },
+    });
+  },
+};</code></pre>
+  </div>
+
+  <div class="panel">
+    <h2><span class="num">4</span>Fill in Setup and test</h2>
+    <ol>
+      <li>Back in Game Log, open <strong>⚙ Setup</strong> and paste the three values.</li>
+      <li>Click <strong>Save settings</strong>, then <strong>Test connection</strong>. You should see “Connected!”.</li>
+    </ol>
+    <p>Settings are saved in this browser only, so repeat step 4 on each phone or computer you use.</p>
+    <p class="note"><strong>If the test fails:</strong> “object not found” means the database isn't shared with the integration (step 2.3) or the ID is wrong. “API token is invalid” means the secret was copied incompletely. A network error usually means the relay URL is wrong or the worker wasn't redeployed after pasting the code.</p>
+  </div>
+
+  <div class="panel done">
+    <p>That's it. Dictate your notes and press <strong>Save to Notion →</strong>.</p>
+    <a class="iconbtn" href="game-log.html">← Back to Game Log</a>
+  </div>
+
+</div>
+<script>
+  document.getElementById('copyWorker').addEventListener('click', async function(){
+    const btn = this;
+    try{
+      await navigator.clipboard.writeText(document.getElementById('workerCode').innerText);
+      btn.textContent = 'copied ✓';
+    }catch(e){ btn.textContent = 'select & copy manually'; }
+    setTimeout(() => { btn.textContent = 'copy code'; }, 2000);
+  });
+</script>
+</body>
+</html>
