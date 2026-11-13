@@ -105,19 +105,15 @@
       <input type="text" id="workerUrl" placeholder="https://your-worker.your-name.workers.dev">
     </div>
     <div class="section">
-      <label for="notionToken">Notion integration secret</label>
-      <input type="password" id="notionToken" placeholder="ntn_… or secret_…">
-      <p class="hint">Stored only on this device. Never put it in any file you upload or host.</p>
-    </div>
-    <div class="section">
-      <label for="dbId">Notion database ID</label>
-      <input type="text" id="dbId" placeholder="32-character ID from the database URL">
+      <label for="passphrase">Relay passphrase</label>
+      <input type="password" id="passphrase" placeholder="The PASSPHRASE you set on the Worker">
+      <p class="hint">Your Notion secret stays in the Worker. This passphrase can only add entries to your one database.</p>
     </div>
     <div class="actions">
       <button class="btn" id="saveSettings" type="button">Save settings</button>
       <button class="btn" id="testSettings" type="button">Test connection</button>
     </div>
-    <p class="small">Setup guide is in <strong>notion-setup.md</strong> that came with this app.</p>
+    <p class="small">Setup steps are at the top of <a href="game-log-worker/worker.js">game-log-worker/worker.js</a>.</p>
   </div>
 
   <!-- ============ LOG FORM ============ -->
@@ -205,7 +201,10 @@
   const settingsPanel = $('settings');
   $('settingsBtn').addEventListener('click', () => settingsPanel.classList.toggle('open'));
 
-  const KEYS = ['workerUrl','notionToken','dbId'];
+  const KEYS = ['workerUrl','passphrase'];
+  // Older versions kept the Notion secret and database ID in this browser. Every site on
+  // buddieh.com can read this storage, so remove them; they now live in the Worker.
+  ['gamelog_notionToken','gamelog_dbId'].forEach(k => { try{ localStorage.removeItem(k); }catch(e){} });
   KEYS.forEach(k => { $(k).value = store.get('gamelog_'+k); });
   if (!store.get('gamelog_workerUrl')) settingsPanel.classList.add('open');
 
@@ -376,29 +375,25 @@
     return blocks;
   }
 
-  async function notionFetch(path, method, body){
-    const worker = store.get('gamelog_workerUrl').replace(/\/$/,'');
-    const token  = store.get('gamelog_notionToken');
-    if (!worker || !token) throw new Error('Fill in the relay URL and Notion secret under ⚙ Setup.');
+  // Uses what is in the Setup fields, so "Test connection" works before pressing Save.
+  async function relayFetch(path, method, body){
+    const worker = $('workerUrl').value.trim().replace(/\/$/,'');
+    const pass   = $('passphrase').value.trim();
+    if (!worker || !pass) throw new Error('Fill in the relay URL and passphrase under ⚙ Setup.');
     const res = await fetch(worker + path, {
       method,
-      headers:{
-        'Authorization':'Bearer ' + token,
-        'Notion-Version':'2022-06-28',
-        'Content-Type':'application/json'
-      },
+      headers:{ 'Authorization':'Bearer ' + pass, 'Content-Type':'application/json' },
       body: body ? JSON.stringify(body) : undefined
     });
     const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data.message || ('Notion error ' + res.status));
+    if (!res.ok) throw new Error(data.message || ('Relay error ' + res.status));
     return data;
   }
 
   $('testSettings').addEventListener('click', async () => {
     setStatus('busy','Testing connection…');
     try{
-      const dbId = store.get('gamelog_dbId') || $('dbId').value.trim();
-      await notionFetch('/v1/databases/' + dbId, 'GET');
+      await relayFetch('/check', 'GET');
       setStatus('ok','Connected! Notion can hear you.');
     }catch(e){ setStatus('err', e.message); }
   });
@@ -411,11 +406,7 @@
     btn.disabled = true;
     setStatus('busy','Saving to Notion…');
     try{
-      await notionFetch('/v1/pages','POST',{
-        parent:{ database_id: store.get('gamelog_dbId') },
-        properties:{ Name:{ title:[{ text:{ content: game } }] } },
-        children: notionBlocks()
-      });
+      await relayFetch('/entry','POST',{ title: game, children: notionBlocks() });
       setStatus('ok','Saved! "' + game + '" is now in your Notion library.');
     }catch(e){
       setStatus('err', e.message + ' — your text is still here; use "Copy as text" as backup.');
