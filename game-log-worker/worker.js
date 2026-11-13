@@ -6,16 +6,14 @@
  * can be read by all of them. The page only holds a passphrase, which can do nothing
  * except add entries to this one database.
  *
- * Setup (Cloudflare dashboard → Workers & Pages → your relay Worker):
- *   1. Replace the Worker's code with this file and deploy.
- *   2. Settings → Variables and Secrets, add:
- *        NOTION_TOKEN   (Secret)  the Notion integration secret, ntn_… or secret_…
- *        NOTION_DB      (Text)    the 32-character database ID from the database URL
- *        PASSPHRASE     (Secret)  any long random phrase; you type it once into the Game Log
- *        ALLOWED_ORIGIN (Text)    optional, defaults to https://buddieh.com
- *   3. In Notion, open the database → ••• → Connections and add the integration.
- *   4. On buddieh.com/game-log.html open ⚙ Setup, enter the Worker URL and the passphrase,
- *      and press Test connection.
+ * Setup: see README.md next to this file, or
+ * https://github.com/Buddieh/Buddieh.github.io/blob/main/game-log-worker/README.md
+ *
+ * Variables (Worker → Settings → Variables and Secrets):
+ *   NOTION_TOKEN   (Secret)  the Notion connection's API token, ntn_…
+ *   NOTION_DB      (Text)    the database ID; a full Notion link to the database also works
+ *   PASSPHRASE     (Secret)  any long phrase; typed once into the Game Log on each device
+ *   ALLOWED_ORIGIN (Text)    optional, defaults to https://buddieh.com
  *
  * Endpoints:
  *   GET  /check   → 200 if the passphrase is right and Notion can see the database
@@ -90,21 +88,31 @@ export default {
 // Looked up once per Worker instance: {db, source: data source id, title: title property name}.
 let cached = null;
 async function findTarget(env, notion) {
-  if (cached && cached.db === env.NOTION_DB) return cached;
+  const id = databaseId(env.NOTION_DB);
+  if (!id) throw Object.assign(new Error('NOTION_DB is not a Notion database ID. Copy the 32 characters before ?v= in the database link.'), { status: 500 });
+  if (cached && cached.db === id) return cached;
   const read = async (path) => {
     const res = await notion(path, 'GET');
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw Object.assign(new Error(data.message || 'Notion error ' + res.status), { status: res.status });
     return data;
   };
-  const db = await read('/databases/' + encodeURIComponent(env.NOTION_DB));
+  const db = await read('/databases/' + id);
   const source = (db.data_sources || [])[0];
   if (!source) throw Object.assign(new Error('That database has no data source the integration can see.'), { status: 404 });
   const ds = await read('/data_sources/' + encodeURIComponent(source.id));
   const title = Object.entries(ds.properties || {}).find(([, p]) => p.type === 'title');
   if (!title) throw Object.assign(new Error('The database has no title column.'), { status: 400 });
-  cached = { db: env.NOTION_DB, source: source.id, title: title[0] };
+  cached = { db: id, source: source.id, title: title[0] };
   return cached;
+}
+
+// Accept the ID however it was pasted: bare, with dashes, in quotes, or as a whole Notion link.
+// The database ID is the last 32 hex digits of the path (a link's ?v= is the view, not the database).
+function databaseId(raw) {
+  const path = String(raw || '').split('?')[0].replace(/-/g, '');
+  const runs = path.match(/[0-9a-f]{32,}/gi);
+  return runs ? runs[runs.length - 1].slice(-32).toLowerCase() : null;
 }
 
 // Compare two strings without leaking how much of the passphrase matched.
