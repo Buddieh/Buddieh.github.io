@@ -23,7 +23,7 @@
  */
 
 const NOTION = 'https://api.notion.com/v1';
-const NOTION_VERSION = '2022-06-28';
+const NOTION_VERSION = '2026-03-11'; // latest Notion API version as of November 2026
 const MAX_BODY = 200_000; // bytes; a long entry is ~20 KB
 
 export default {
@@ -59,10 +59,15 @@ export default {
     });
     const pass = async (res) => reply(res.status, res.ok ? { ok: true } : { message: (await res.json().catch(() => ({}))).message || 'Notion error ' + res.status });
 
+    // Since API version 2025-09-03 a database holds one or more data sources (its tables), and
+    // pages are created in a data source. Use the database's first one, and its title column,
+    // whatever it is called.
+    let target;
+    try { target = await findTarget(env, notion); }
+    catch (e) { return reply(e.status || 502, { message: e.message }); }
+
     const { pathname } = new URL(request.url);
-    if (request.method === 'GET' && pathname === '/check') {
-      return pass(await notion('/databases/' + encodeURIComponent(env.NOTION_DB), 'GET'));
-    }
+    if (request.method === 'GET' && pathname === '/check') return reply(200, { ok: true });
     if (request.method === 'POST' && pathname === '/entry') {
       const text = await request.text();
       if (text.length > MAX_BODY) return reply(413, { message: 'Entry is too long.' });
@@ -73,14 +78,34 @@ export default {
       if (!Array.isArray(entry.children) || entry.children.length > 100) return reply(400, { message: 'children must be a list of at most 100 blocks.' });
       // The database is fixed here, so the passphrase can only ever add pages to it.
       return pass(await notion('/pages', 'POST', {
-        parent: { database_id: env.NOTION_DB },
-        properties: { Name: { title: [{ text: { content: title } }] } },
+        parent: { type: 'data_source_id', data_source_id: target.source },
+        properties: { [target.title]: { title: [{ text: { content: title } }] } },
         children: entry.children,
       }));
     }
     return reply(404, { message: 'Not found.' });
   },
 };
+
+// Looked up once per Worker instance: {db, source: data source id, title: title property name}.
+let cached = null;
+async function findTarget(env, notion) {
+  if (cached && cached.db === env.NOTION_DB) return cached;
+  const read = async (path) => {
+    const res = await notion(path, 'GET');
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw Object.assign(new Error(data.message || 'Notion error ' + res.status), { status: res.status });
+    return data;
+  };
+  const db = await read('/databases/' + encodeURIComponent(env.NOTION_DB));
+  const source = (db.data_sources || [])[0];
+  if (!source) throw Object.assign(new Error('That database has no data source the integration can see.'), { status: 404 });
+  const ds = await read('/data_sources/' + encodeURIComponent(source.id));
+  const title = Object.entries(ds.properties || {}).find(([, p]) => p.type === 'title');
+  if (!title) throw Object.assign(new Error('The database has no title column.'), { status: 400 });
+  cached = { db: env.NOTION_DB, source: source.id, title: title[0] };
+  return cached;
+}
 
 // Compare two strings without leaking how much of the passphrase matched.
 async function sameText(a, b) {
