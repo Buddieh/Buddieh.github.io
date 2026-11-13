@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dynamo scripts for Revit — Shahdad "Buddieh" Neshin</title>
+<meta name="description" content="Free Dynamo scripts for Revit by Shahdad &quot;Buddieh&quot; Neshin: export sheets to PDF and DWG, and place chained dimensions in masonry plans. Run from Dynamo Player, no packages.">
+<link rel="canonical" href="https://buddieh.com/dynamo/">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Sora:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#F6F5EF;--ink:#22242A;--blue:#2B5BD7;--yellow:#F2B92E;--red:#E4572E;--line:#22242A;--card:#fff;--maxw:1060px}
+  *{box-sizing:border-box;margin:0;padding:0}
+  @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+  body{
+    font-family:'Sora',system-ui,sans-serif;color:var(--ink);
+    background-color:var(--paper);
+    background-image:radial-gradient(rgba(34,36,42,.13) 1.5px, transparent 1.5px);
+    background-size:26px 26px;line-height:1.6;font-size:17px;
+  }
+  a{color:var(--blue)}
+  a:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:4px}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+
+  header{position:sticky;top:0;z-index:10;background:rgba(246,245,239,.9);backdrop-filter:blur(6px);border-bottom:2px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;max-width:var(--maxw);margin:0 auto}
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.75rem;line-height:1;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
+  .nav a.cta{
+    font-family:'IBM Plex Mono',monospace;font-size:.85rem;font-weight:500;text-decoration:none;color:var(--ink);
+    border:2px solid var(--line);border-radius:10px;padding:8px 16px;background:var(--yellow);box-shadow:3px 3px 0 var(--line);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .nav a.cta:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--line)}
+  .nav a.cta{white-space:nowrap}
+  @media (max-width:560px){.nav{padding:14px 16px}.logo{font-size:1.3rem;gap:8px}.logo svg,.logo img{width:40px;height:32px}.nav-links{gap:14px}.nav a.cta{padding:8px 12px}}
+  @media (max-width:370px){.logo .name{display:none}}
+
+  .intro{padding:72px 0 24px}
+  .kicker{font-family:'IBM Plex Mono',monospace;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;opacity:.75;margin-bottom:14px}
+  h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(2.2rem,5vw,3.4rem);line-height:1.05;letter-spacing:-.01em}
+  .intro p{max-width:56ch;margin-top:18px;font-size:1.05rem}
+
+  section{padding:40px 0 24px}
+  h2{font-family:'IBM Plex Mono',monospace;font-size:.85rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px;opacity:.8}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+  .proj{
+    position:relative;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:24px;
+    box-shadow:5px 5px 0 var(--line);display:flex;flex-direction:column;gap:12px;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .proj:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--line)}
+  .proj .top{display:flex;align-items:center;gap:14px}
+  .proj img{width:48px;height:48px;flex:none;display:block}
+  .proj h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.15rem;line-height:1.2}
+  .proj h3 a{color:var(--ink);text-decoration:none}
+  /* whole card is clickable via the title link */
+  .proj h3 a::after{content:"";position:absolute;inset:0;border-radius:16px}
+  .proj p{font-size:.95rem}
+  .proj .meta{margin-top:auto;padding-top:6px;display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:.78rem}
+  .proj .open{opacity:.65}
+  .proj .src{position:relative;z-index:1;color:var(--ink);opacity:.65}
+  .proj .src:hover{opacity:1}
+  .proj .tag{opacity:.65;white-space:nowrap}
+  .proj .open{white-space:nowrap}
+  /* not live yet: no link, no hover lift */
+  .proj.soon{box-shadow:5px 5px 0 rgba(34,36,42,.35);border-style:dashed}
+  .proj.soon:hover{transform:none;box-shadow:5px 5px 0 rgba(34,36,42,.35)}
+  .proj .badge{font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;border:2px solid var(--line);border-radius:999px;padding:3px 10px;background:var(--yellow)}
+
+  .kicker a{color:inherit}
+  .howto{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:22px 24px;box-shadow:5px 5px 0 var(--line)}
+  .howto ol{padding-left:1.3em;display:grid;gap:4px}
+  .howto p{font-size:.9rem;margin-top:12px;opacity:.8}
+  .howto code,.script code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
+  .list{display:grid;gap:22px}
+  .script{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:24px;box-shadow:5px 5px 0 var(--line);display:grid;gap:14px}
+  .script .top{display:flex;align-items:center;gap:14px}
+  .script img{width:48px;height:48px;flex:none}
+  .script h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.25rem;line-height:1.2}
+  .script .sum{font-size:.95rem;opacity:.8}
+  .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px 32px}
+  .script h4{font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;opacity:.7;margin-bottom:6px}
+  .script ul{padding-left:1.1em;font-size:.92rem;display:grid;gap:3px}
+  .foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;border-top:2px dashed rgba(34,36,42,.25);padding-top:14px}
+  .dl{
+    font-family:'IBM Plex Mono',monospace;font-size:.82rem;font-weight:500;text-decoration:none;color:var(--ink);white-space:nowrap;
+    border:2px solid var(--line);border-radius:10px;padding:7px 14px;background:var(--yellow);box-shadow:3px 3px 0 var(--line);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .dl:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--line)}
+  .script .compat{display:flex;padding:0;flex-wrap:wrap;gap:6px;list-style:none;font-family:'IBM Plex Mono',monospace;font-size:.72rem}
+  .compat li{border:2px solid var(--line);border-radius:999px;padding:2px 10px}
+  .compat li.no{border-style:dashed;opacity:.55}
+  footer{margin-top:64px;border-top:2px solid var(--line);padding:26px 0;font-family:'IBM Plex Mono',monospace;font-size:.78rem;opacity:.7}
+  footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  footer a{color:inherit}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav" aria-label="Main">
+    <a class="logo" href="../" aria-label="Buddieh, home">
+      <img src="../icons/buddieh.svg" width="50" height="40" alt="">
+      <span class="name">Buddieh</span>
+    </a>
+    <a class="cta" href="mailto:hello@buddieh.com">Say hello →</a>
+  </nav>
+</header>
+
+<main class="wrap">
+  <div class="intro">
+    <p class="kicker"><a href="../projects/">Projects</a> / Dynamo</p>
+    <h1>Dynamo scripts for Revit.</h1>
+    <p>Graphs I wrote for my own Revit work, free to use. Each one runs from Dynamo Player and needs no packages.</p>
+  </div>
+
+  <section aria-labelledby="h-install">
+    <h2 id="h-install">Install</h2>
+    <div class="howto">
+      <ol>
+        <li>Download a <code>.dyn</code> file below and save it in a folder of your choice.</li>
+        <li>In Revit, open <strong>Manage › Dynamo Player</strong> and point it at that folder.</li>
+        <li>Click <strong>Run</strong> next to the script.</li>
+      </ol>
+      <p>All scripts are tested on Revit 2025; versions in dashed tags aren't tested yet. On Revit 2027, open the graph once in Dynamo and save it, so the Python engine upgrade is kept.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-scripts">
+    <h2 id="h-scripts">Scripts</h2>
+    <div class="list">
+      <article class="script" id="sheet-exporter">
+        <div class="top"><img src="../icons/sheet-exporter.svg" alt=""><div><h3>Sheet Exporter</h3><p class="sum">Export PDFs and DWGs from the sheets you pick, all from one dialog.</p></div></div>
+        <div class="cols">
+          <div>
+            <h4>What it does</h4>
+            <ul>
+              <li>Pick sheets by search, All/None, or Revit's saved sheet sets</li>
+              <li>PDF with Revit's own export options, or a PDF setup saved in the model</li>
+              <li>DWG from any saved export setup, one file per sheet, no xrefs</li>
+              <li>File names from sheet parameters, e.g. <code>{Sheet Number} - {Sheet Name}</code></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Good to know</h4>
+            <ul>
+              <li>Remembers your options, folder and name pattern between runs</li>
+              <li>Cancel stops after the current file and can delete what it made</li>
+              <li>If Player skips the dialog on a second run, run it once from Dynamo</li>
+            </ul>
+          </div>
+        </div>
+        <div class="foot">
+          <a class="dl" href="Sheet-Exporter.dyn" download="Sheet Exporter.dyn">Download .dyn ↓</a>
+          <ul class="compat" aria-label="Compatibility"><li>Revit 2025</li><li class="no" title="Not tested yet">2026</li><li class="no" title="Not tested yet">2027</li></ul>
+        </div>
+      </article>
+
+      <article class="script" id="smart-dimensions">
+        <div class="top"><img src="../icons/smart-dimensions.svg" alt=""><div><h3>Smart Dimensions</h3><p class="sum">Chained dimension strings for masonry plans, from grid to grid.</p></div></div>
+        <div class="cols">
+          <div>
+            <h4>What it does</h4>
+            <ul>
+              <li>Dimensions along every line you drew in a chosen path line style</li>
+              <li>Picks up wall faces, wall ends and opening jambs, with door and window heights</li>
+              <li>A second line style gives overall grid-to-grid strings</li>
+              <li>Works with walls and columns from linked models</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Before you run</h4>
+            <ul>
+              <li>Make two line styles, e.g. <code>DIM-PATH</code> and <code>DIM-PATH-OVERALL</code></li>
+              <li>Curved walls and walls at an angle to the path are skipped</li>
+              <li>Families are dimensioned by their outline only</li>
+            </ul>
+          </div>
+        </div>
+        <div class="foot">
+          <a class="dl" href="Smart-Dimensions.dyn" download="Smart Dimensions.dyn">Download .dyn ↓</a>
+          <ul class="compat" aria-label="Compatibility"><li>Revit 2025</li><li class="no" title="Not tested yet">2026</li><li class="no" title="Not tested yet">2027</li></ul>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="year"></span> Shahdad "Buddieh" Neshin · Ghent, Belgium</span>
+    <span>BTW BE 0800.845.262</span>
+  </div>
+</footer>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
